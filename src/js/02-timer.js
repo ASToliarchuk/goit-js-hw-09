@@ -24,7 +24,8 @@ const options = {
   minuteIncrement: 1,
   onClose(selectedDates) {
     if (selectedDates[0] <= Date.now()) {
-     Notify.warning(`Please choose a date in the future`);
+      Notify.warning(`No no no, mister fish.
+                      Please choose a date in the future`);
     } else {
       startBtn.disabled = false;
       selectedTime = selectedDates[0];
