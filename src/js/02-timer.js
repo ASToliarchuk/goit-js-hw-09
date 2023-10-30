@@ -16,6 +16,7 @@ const timerDisplay = {
 startBtn.disabled = true;
 let timerTime = 0;
 let selectedTime = null;
+let timerId = null;
 
 const options = {
   enableTime: true,
@@ -24,8 +25,7 @@ const options = {
   minuteIncrement: 1,
   onClose(selectedDates) {
     if (selectedDates[0] <= Date.now()) {
-      Notify.warning(`No no no, mister fish.
-                      Please choose a date in the future`);
+      Notify.warning(`Please choose a date in the future`);
     } else {
       startBtn.disabled = false;
       selectedTime = selectedDates[0];
@@ -37,13 +37,26 @@ startBtn.addEventListener('click', clickStart);
 
 function clickStart() {
   startBtn.disabled = true;
-  setInterval(() => {
+
+  if (timerId) {
+    clearInterval(timerId);
+    timerId = null;
+  }
+
+  timerId = setInterval(() => {
     timerTime = selectedTime - Date.now();
     if (timerTime > 0) {
       inputTime.disabled = true;
     } else {
       inputTime.disabled = false;
     }
+
+    if (timerTime <= 0) {
+      clearInterval(timerId);
+      timerId = null;
+      Notify.success('Time is over');
+    }
+
     let { days, hours, minutes, seconds } = convertMs(timerTime);
     timerDisplay.days.textContent = days;
     timerDisplay.hours.textContent = hours;
