@@ -1,7 +1,5 @@
 import flatpickr from "flatpickr";
-
 import "flatpickr/dist/flatpickr.min.css";
-
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 const startBtn = document.querySelector(`[data-start]`);
@@ -32,6 +30,7 @@ const options = {
     }
   },
 };
+
 flatpickr('#datetime-picker', options);
 startBtn.addEventListener('click', clickStart);
 
@@ -45,25 +44,29 @@ function clickStart() {
 
   timerId = setInterval(() => {
     timerTime = selectedTime - Date.now();
-    if (timerTime > 0) {
-      inputTime.disabled = true;
-    } else {
-      inputTime.disabled = false;
-    }
 
-    let { days, hours, minutes, seconds } = convertMs(timerTime);
-    timerDisplay.days.textContent = days;
-    timerDisplay.hours.textContent = hours;
-    timerDisplay.minutes.textContent = minutes;
-    timerDisplay.seconds.textContent = seconds;
-
-    if (days === 0 && hours === 0 && minutes === 0 && seconds === 0) {
+    if (timerTime <= 0) {
       clearInterval(timerId);
       timerId = null;
-      Notiflix.Notify.success('Time is over');
+      Notify.success(`Time is over`);
+
+      inputTime.disabled = false;
+      timerDisplay.days.textContent = '00';
+      timerDisplay.hours.textContent = '00';
+      timerDisplay.minutes.textContent = '00';
+      timerDisplay.seconds.textContent = '00';
+    } else {
+      inputTime.disabled = true;
+
+      let { days, hours, minutes, seconds } = convertMs(timerTime);
+      timerDisplay.days.textContent = days;
+      timerDisplay.hours.textContent = hours;
+      timerDisplay.minutes.textContent = minutes;
+      timerDisplay.seconds.textContent = seconds;
     }
   }, 1000);
 }
+
 
 function convertMs(ms) {
   // Number of milliseconds per unit of time
