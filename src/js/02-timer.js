@@ -51,7 +51,7 @@ function clickStart() {
       inputTime.disabled = false;
     }
 
-    if (timerTime <= 0) {
+    if (timerTime === 0) {
       clearInterval(timerId);
       timerId = null;
       Notify.success('Time is over');
