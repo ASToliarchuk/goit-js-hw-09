@@ -51,17 +51,17 @@ function clickStart() {
       inputTime.disabled = false;
     }
 
-    if (timerTime === 0) {
-      clearInterval(timerId);
-      timerId = null;
-      Notify.success('Time is over');
-    }
-
     let { days, hours, minutes, seconds } = convertMs(timerTime);
     timerDisplay.days.textContent = days;
     timerDisplay.hours.textContent = hours;
     timerDisplay.minutes.textContent = minutes;
     timerDisplay.seconds.textContent = seconds;
+
+    if (days === 0 && hours === 0 && minutes === 0 && seconds === 0) {
+      clearInterval(timerId);
+      timerId = null;
+      Notiflix.Notify.success('Time is over');
+    }
   }, 1000);
 }
 
